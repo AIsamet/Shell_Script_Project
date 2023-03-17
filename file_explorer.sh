@@ -141,4 +141,44 @@ function find_files_with_string() {
 	find . -type f -name "$string"
 }
 
+# Function selection
+function selection() {
+	while true; do 
+		read -p "Entrez votre choix : " choice
+		case $choice in
+			1) write_logs show_current_dir;;
+			2) show_date_time ;;
+			3) show_files_info ;;
+			4) show_subdirs_count ;;
+			5) show_directory_tree ;;
+			6) show_subdirs_size ;;
+			7) change_directory ;;
+			8) find_files_newer_than ;;
+			9) find_files_newer_than_recursive ;;
+			10) find_files_older_than ;;
+			11) find_files_older_than_recursive ;;
+			12) find_files_larger_than ;;
+			13) find_files_larger_than_recursive ;;
+			14) find_files_smaller_than ;;
+			15) find_files_smaller_than_recursive ;;
+			16) find_files_with_extension ;;
+			17) find_files_with_extension_recursive ;;
+			18) find_files_with_string ;;
+			19) echo "A définir" ;;
+			R) bash menu.sh 
+			break ;;
+			Q) exit 0 ;;
+			*) echo "Erreur : choix invalide" 
+			selection
+			break;;
+		esac
+	done
+}
+
+function write_logs() {
+	echo $1 "							$(date)">> logs.txt 
+}
+
+
 show_file_explorer_options
+selection

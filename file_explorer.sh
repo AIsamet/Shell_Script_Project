@@ -29,23 +29,35 @@ function show_file_explorer_options() {
 	echo "Q. Quitter"
 }
 
+function write_logs() {
+	echo -e "--------------------------------------------------------------------------------------------------------------------------" >> logs.txt
+	echo -e "$*" "						$(date)" >> logs.txt 
+	echo -e "--------------------------------------------------------------------------------------------------------------------------" >> logs.txt
+}
+
 # 1. Afficher le répertoire courant
 function show_current_dir() {
-	echo "Répertoire courant : $(pwd)"
+	sortie="Répertoire courant : $(pwd)"
+	echo -e $sortie
 	echo ""
+	write_logs $sortie
 }
 
 # 2. Afficher la date et l'heure du système
 function show_date_time() {
-	echo "Date et heure du système : $(date)"
+	sortie="Date et heure du système : $(date)"
+	echo -e $sortie
 	echo ""
+	write_logs $sortie
 }
 
 # 3. Afficher le nombre de fichiers et leur taille dans le répertoire courant
 function show_files_info() {
-	echo "Nombre de fichiers dans le répertoire courant : $(ls -1 | wc -l)"
-	echo "Taille totale des fichiers dans le répertoire courant : $(du -sh . | cut -f1)"
+	sortie="Nombre de fichiers dans le répertoire courant : $(ls -1 | wc -l)"
+	sortie="${sortie} \nTaille totale des fichiers dans le répertoire courant : $(du -sh . | cut -f1)"
+	echo -e $sortie
 	echo ""
+	write_logs $sortie
 }
 
 # 4. Afficher le nombre de sous-répertoires dans le répertoire courant
@@ -146,7 +158,7 @@ function selection() {
 	while true; do 
 		read -p "Entrez votre choix : " choice
 		case $choice in
-			1) write_logs show_current_dir;;
+			1) show_current_dir;;
 			2) show_date_time ;;
 			3) show_files_info ;;
 			4) show_subdirs_count ;;
@@ -174,11 +186,6 @@ function selection() {
 		esac
 	done
 }
-
-function write_logs() {
-	echo $1 "							$(date)">> logs.txt 
-}
-
 
 show_file_explorer_options
 selection

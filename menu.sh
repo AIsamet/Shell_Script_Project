@@ -7,6 +7,7 @@ function show_menu() {
 	echo "1. File explorer"
 	echo "2. Process epxlorer"
 	echo "3. Services explorer"
+	echo "Q. Quitter"
 }
 
 show_menu
@@ -25,6 +26,9 @@ while true; do
 	3)
 		bash services_explorer.sh
 		break
+		;;
+	q|Q)
+		exit 0
 		;;
 	*)
 		echo "Option invalide. Veuillez choisir 1, 2 ou 3."

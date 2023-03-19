@@ -177,9 +177,9 @@ function selection() {
 			17) find_files_with_extension_recursive ;;
 			18) find_files_with_string ;;
 			19) echo "A définir" ;;
-			R) bash menu.sh 
+			r|R) bash menu.sh 
 			break ;;
-			Q) exit 0 ;;
+			q|Q) exit 0;;
 			*) echo "Erreur : choix invalide" 
 			selection
 			break;;

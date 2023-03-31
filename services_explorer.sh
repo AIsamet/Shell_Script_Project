@@ -1,3 +1,6 @@
+#!/bin/bash
+
+
 function show_services_explorer_options() {
 	clear
 	echo "============================"

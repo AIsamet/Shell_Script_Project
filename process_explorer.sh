@@ -1,3 +1,6 @@
+#!/bin/bash
+
+
 function show_process_explorer_options() {
 	clear
 	echo "============================"

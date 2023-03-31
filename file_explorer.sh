@@ -1,10 +1,17 @@
 #!/bin/bash
 
+GREEN='\033[0;32m'
+NC='\033[0m' 
+
 function show_file_explorer_options() {
 	clear
-	echo "============================"
-	echo "  FILE EXPLORER"
-	echo "============================"
+	echo -n "
+  ___ ___ _    ___   _____  _____ _    ___  ___ ___ ___ 
+ | __|_ _| |  | __| | __\ \/ / _ \ |  / _ \| _ \ __| _ \ 
+ | _| | || |__| _|  | _| >  <|  _/ |_| (_) |   / _||   /
+ |_| |___|____|___| |___/_/\_\_| |____\___/|_|_\___|_|_\ 
+                                                        
+"
 	echo "1. Afficher le répertoire courant"
 	echo "2. Afficher la date et l'heure du système"
 	echo "3. Afficher le nombre de fichiers et leur taille dans le répertoire courant"
@@ -24,9 +31,9 @@ function show_file_explorer_options() {
 	echo "17. Rechercher tous les fichiers d'une extension donnée dans tous les sous-répertoires"
 	echo "18. Rechercher tous les fichiers dont le nom contient une chaine de caractère dans tous les sous-répertoires"
 	# + Chaque résultat de sortie doit être sauvegardé dans un fichier (résultats précédent doivent pas être supprimés + trié par date)
-	echo "19. *A définir*"
+	echo -e "19. *A définir*\n"
 	echo "R. Retour"
-	echo "Q. Quitter"
+	echo -e "Q. Quitter\n"
 }
 
 function write_logs() {
@@ -84,79 +91,92 @@ function show_subdirs_size() {
 
 # 7. Changer de répertoire courant
 function change_directory() {
-	read -p "Entrez le chemin absolu ou relatif du répertoire : " directory
+	echo -e -n "${GREEN}Entrez le chemin absolu ou relatif du répertoire : ${NC}"
+	read directory
 	cd "$directory" || echo "Erreur : répertoire inexistant" >&2
 }
 
 # 8. Rechercher les fichiers plus récents qu'une date dans le répertoire courant
 function find_files_newer_than() {
-	read -p "Entrez la date (format AAAA-MM-JJ HH:MM:SS) : " date
+	echo -e -n "${GREEN}Entrez la date (format AAAA-MM-JJ HH:MM:SS) : ${NC}"
+	read date
 	find . -maxdepth 1 -type f -newermt "$date"
 }
 
 # 9. Rechercher les fichiers plus récents qu'une date dans tous les sous-répertoires
 function find_files_newer_than_recursive() {
-	read -p "Entrez la date (format AAAA-MM-JJ HH:MM:SS) : " date
+	echo -e -n "${GREEN}Entrez la date (format AAAA-MM-JJ HH:MM:SS) : ${NC}"
+	read date
 	find . -type f -newermt "$date"
 }
 
 # 10. Rechercher les fichiers plus anciens qu'une date dans le répertoire courant
 function find_files_older_than() {
-	read -p "Entrez la date (format AAAA-MM-JJ HH:MM:SS) : " date
+	echo -e -n "${GREEN}Entrez la date (format AAAA-MM-JJ HH:MM:SS) : ${NC}"
+	read date
 	find . -maxdepth 1 -type f ! -newermt "$date"
 }
 
 # 11. Rechercher les fichiers plus anciens qu'une date dans tous les sous-répertoires
 function find_files_older_than_recursive() {
-	read -p "Entrez la date (format AAAA-MM-JJ HH:MM:SS) : " date
+	echo -e -n "${GREEN}Entrez la date (format AAAA-MM-JJ HH:MM:SS) : ${NC}"
+	read date
 	find . -type f ! -newermt "$date"
 }
 
 # 12. Rechercher les fichiers de poids supérieur à une valeur dans le répertoire courant
 function find_files_larger_than() {
-	read -p "Entrez la taille (format X[kMG]) : " size
+	echo -e -n "${GREEN}Entrez la taille (format X[kMG]) : ${NC}"
+	read size
 	find . -maxdepth 1 -type f -size +$size
 }
 
 # 13. Rechercher les fichiers de poids supérieur à une valeur dans tous les sous-répertoires
 function find_files_larger_than_recursive() {
-	read -p "Entrez la taille (format X[kMG]) : " size
+	echo -e -n "${GREEN}Entrez la taille (format X[kMG]) : ${NC}"
+	read size
 	find . -type f -size +$size
 }
 
 # 14. Rechercher les fichiers de poids inférieur à une valeur dans le répertoire courant
 function find_files_smaller_than() {
-	read -p "Entrez la taille (format X[kMG]) : " size
+	echo -e -n "${GREEN}Entrez la taille (format X[kMG]) : ${NC}"
+	read size
 	find . -maxdepth 1 -type f -size -$size
 }
 
 # 15. Rechercher les fichiers de poids inférieur à une valeur dans tous les sous-répertoires
 function find_files_smaller_than_recursive() {
-	read -p "Entrez la taille (format X[kMG]) : " size
+	echo -e -n "${GREEN}Entrez la taille (format X[kMG]) : ${NC}"
+	read size
 	find . -type f -size -$size
 }
 # 16. Rechercher tous les fichiers d'une extension donnée dans le répertoire courant
 function find_files_with_extension() {
-	read -p "Entrez l'extension de fichier recherchée : " extension
+	echo -e -n "${GREEN}Entrez l'extension de fichier recherchée : ${NC}"
+	read extension
 	find . -maxdepth 1 -type f -name "*.$extension"
 }
 
 # 17. Rechercher tous les fichiers d'une extension donnée dans tous les sous-répertoires
 function find_files_with_extension_recursive() {
-	read -p "Entrez l'extension de fichier recherchée : " extension
+	echo -e -n "${GREEN}Entrez l'extension de fichier recherchée : ${NC}"
+	read extension
 	find . -type f -name "*.$extension"
 }
 
 # 18. Rechercher tous les fichiers dont le nom contient une chaine de caractère dans tous les sous-répertoires
 function find_files_with_string() {
-	read -p "Entrez la chaine de caractères recherchée : " string
+	echo -e -n "${GREEN}Entrez la chaine de caractères recherchée : ${NC}"
+	read string
 	find . -type f -name "$string"
 }
 
 # Function selection
 function selection() {
 	while true; do 
-		read -p "Entrez votre choix : " choice
+		echo -e -n "${GREEN}Entrez votre choix : ${NC}"
+		read choice
 		case $choice in
 			1) show_current_dir;;
 			2) show_date_time ;;

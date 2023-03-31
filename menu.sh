@@ -1,3 +1,8 @@
+#!/bin/bash
+
+GREEN='\033[0;32m'
+NC='\033[0m' 
+
 # Fonction pour afficher le menu principal
 function show_menu() {
 	clear
@@ -21,7 +26,8 @@ by AYDIN Isamettin & Feucht Joé
 show_menu
 
 while true; do
-	read -p "Choisissez une option : " choice
+	echo -e -n "${GREEN}Choisissez une option : ${NC} "
+	read choice
 	case $choice in
 	1)
 		bash file_explorer.sh

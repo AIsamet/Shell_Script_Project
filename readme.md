@@ -1,0 +1,1 @@
+En cas d'erreur d'execution essayer : sed -i 's/\r//' menu.sh file_explorer.sh process_explorer.sh services_explorer.sh 

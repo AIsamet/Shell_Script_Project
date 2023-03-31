@@ -1,13 +1,21 @@
 # Fonction pour afficher le menu principal
 function show_menu() {
 	clear
-	echo "============================"
-	echo "  MENU PRINCIPAL"
-	echo "============================"
+	echo "
+    ____               _      __     ____  ___   _____ __  __
+   / __ \_________    (_)__  / /_   / __ )/   | / ___// / / /
+  / /_/ / ___/ __ \  / / _ \/ __/  / __  / /| | \__ \/ /_/ / 
+ / ____/ /  / /_/ / / /  __/ /_   / /_/ / ___ |___/ / __  /  
+/_/   /_/   \____/_/ /\___/\__/  /_____/_/  |_/____/_/ /_/   
+                /___/                                        
+
+by AYDIN Isamettin & Feucht Joé
+
+"
 	echo "1. File explorer"
 	echo "2. Process epxlorer"
 	echo "3. Services explorer"
-	echo "Q. Quitter"
+	echo -e "Q. Quitter\n"
 }
 
 show_menu

@@ -8,6 +8,8 @@ NC='\033[0m'
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
 NC='\033[0m'
+MEMORY_COLOR='\033[1;35m'
+
 
 function show_process_explorer_options() {
 	clear
@@ -183,10 +185,51 @@ function show_processes_by_user() {
 
 # 4. Identifier les processus consommant le plus de mémoire et indiquer leur propriétaire
 function show_processes_by_memory() {
-	sortie="Tous les processus consommant le plus de mémoire : $(ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%mem | head)"
-	echo -e $sortie
-	echo ""
-	write_logs $sortie
+	# sortie="Tous les processus consommant le plus de mémoire : $(ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%mem | head)"
+	# echo -e $sortie
+	# echo ""
+	# write_logs $sortie
+
+    while true; do
+        clear
+        show_process_explorer_options
+        echo -e "\nVous avez choisi l'option 4 \n"
+
+        # Affiche l'en-tête avec les couleurs pour chaque colonne
+        printf "${PID_COLOR}%-6s${NC} | ${OWNER_COLOR}%-14s${NC} | ${MEMORY_COLOR}%-12s${NC} | ${PROCESS_COLOR}%-s${NC}\n" "PID" "Propriétaire" "Mémoire" "Nom du processus"
+        printf "${NC}---------------------------------------------------------------${NC}\n"
+
+        # Trie les processus par consommation de mémoire
+        pids=$(ps axo pid,user,pmem,comm | sort -k 3 -r | awk '{print $1}')
+
+        # Affiche chaque processus avec des couleurs différentes pour chaque colonne
+        for pid in $pids; do
+            # Obtient le nom du propriétaire du processus
+            owner=$(ps -o user= -p $pid 2>/dev/null)
+
+            if [[ -n "$owner" ]]; then
+                # Obtient la quantité de mémoire utilisée par le processus
+                memory=$(ps -o pmem= -p $pid 2>/dev/null)
+
+                # Obtient le nom du processus correspondant au PID
+                process=$(ps -o comm= -p $pid 2>/dev/null)
+
+                # Affiche le PID, le propriétaire, la quantité de mémoire utilisée et le nom du processus dans un format esthétique avec des couleurs différentes pour chaque colonne
+                printf "${PID_COLOR}%-6s${NC} | ${OWNER_COLOR}%-14s${NC} | ${MEMORY_COLOR}%-12s${NC} | ${PROCESS_COLOR}%-s${NC}\n" "$pid" "$owner" "$memory" "$process"
+            fi
+        done
+
+        echo ""
+        # Affiche un timer jusqu'à ce que l'utilisateur appuie sur la touche "Q"
+        for i in {30..1}; do
+            printf "\r${YELLOW}Actualisation dans %2d secondes... Appuyez sur Q pour quitter.${NC}" "$i"
+            read -s -n 1 -t 1 key
+            if [[ $key = "q" ]] || [[ $key = "Q" ]]; then
+                printf "\r${NC}"
+                return
+            fi
+        done
+	done
 }
 
 # 5. Identifier les processus dont le nom contient une chaine de caractères (définie en paramètre) et indiquer leur propriétaire

@@ -21,7 +21,8 @@ function show_services_explorer_options() {
 	echo "1. Identifier les services disponibles/installés sur le système"
 	echo "2. Identifier les services actifs sur le système"
 	echo "3. Identifier le statut d’un service dont le nom contient une chaine de caractères (définie en paramètre)"
-	echo "4. *A définir*"
+	echo "4. Démarrer un service (necessite des privbileges super-utilisateur)"
+	echo "5. Stopper un service (necessite des privbileges super-utilisateur)"
 	echo "R. Retour"
 	echo "Q. Quitter"
 }
@@ -175,6 +176,26 @@ function show_services_by_name() {
 	done
 }
 
+# 4. Demarer un service renseigné en input
+function start_service() {
+
+	# Lecture de la chaîne de caractères pour le filtre
+	echo -n -e "${GREEN}Entrez le nom du service à démarrer : ${NC}"
+	read service_name
+
+	systemctl start $service_name && echo -e "${GREEN}Service $service_name démarré avec succès${NC}" || echo -e "${RED}Erreur lors du démarrage du service $service_name${NC}"
+}
+
+# 5. Stoper un service renseigné en input
+function stop_service() {
+
+	# Lecture de la chaîne de caractères pour le filtre
+	echo -n -e "${GREEN}Entrez le nom du service à stopper : ${NC}"
+	read service_name
+
+	systemctl stop $service_name && echo -e "${GREEN}Service $service_name stoppé avec succès${NC}" || echo -e "${RED}Erreur lors de l'arrêt du service $service_name${NC}"
+}
+
 function selection() {
 	while true; do 
 		echo -e -n "\n${GREEN}Entrez votre choix : ${NC}"
@@ -184,7 +205,8 @@ function selection() {
 			1) show_all_services;;
 			2) show_active_services;;
 			3) show_services_by_name;;
-			4) echo "A définir";;
+			4) start_service;;
+			5) stop_service;;
 			r|R) bash menu.sh 
 			break ;;
 			q|Q) exit 0;;

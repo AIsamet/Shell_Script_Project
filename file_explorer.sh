@@ -37,9 +37,9 @@ function show_file_explorer_options() {
 }
 
 function write_logs() {
-	echo -e "--------------------------------------------------------------------------------------------------------------------------" >> logs.txt
-	echo -e "$*" "						$(date)" >> logs.txt 
-	echo -e "--------------------------------------------------------------------------------------------------------------------------" >> logs.txt
+	echo -e "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" >> logs.txt
+	echo -e "$(date)	|" "		$*" >> logs.txt 
+	echo -e "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" >> logs.txt
 }
 
 # a. Afficher le répertoire courant
@@ -69,117 +69,174 @@ function show_files_info() {
 
 # d. Afficher le nombre de sous-répertoires dans le répertoire courant
 function show_subdirs_count() {
-	echo "Nombre de sous-répertoires dans le répertoire courant : $(find . -maxdepth 1 -type d | wc -l)"
+	sortie="Nombre de sous-répertoires dans le répertoire courant : $(find . -maxdepth 1 -type d | wc -l)"
+	echo -e $sortie
 	echo ""
+	write_logs $sortie
 }
 
 # e. Afficher l'arborescence du répertoire courant
 function show_directory_tree() {
 	echo -e -n "${GREEN}Entrez la profondeur de recherche souhaitée : ${NC}"
 	read profondeur
-	echo -e "\nArborescence du répertoire courant :"
-	echo ""
+	sortie="\nArborescence du répertoire courant ('$(pwd)') avec la profondeur ${profondeur} :"
+	echo -e $sortie
+	sortie="${sortie}\n$(tree . -L $profondeur)"
+	write_logs $sortie
 	tree . -L $profondeur
 	echo ""
 }
 
 # f. Afficher le poids de chaque sous-répertoire dans le répertoire courant
 function show_subdirs_size() {
-	echo "Poids de chaque sous-répertoire dans le répertoire courant :"
-	echo ""
+	sortie="Poids de chaque sous-répertoire dans le répertoire courant :"
+	echo -e $sortie
+	sortie="${sortie} \n$(du -sh ./* | sort -h)"
 	du -sh */
+	write_logs $sortie
 	echo ""
 }
 
 # g. Changer de répertoire courant
 function change_directory() {
+	sortie="${GREEN}Entrez le chemin absolu ou relatif du répertoire : ${NC}"
 	echo -e -n "${GREEN}Entrez le chemin absolu ou relatif du répertoire : ${NC}"
 	read directory
+	sortie="${sortie} \nChangement de répertoire courant : $(pwd) -> ${directory}"
+	write_logs $sortie
 	cd "$directory" || echo "Erreur : répertoire inexistant" >&2
 }
 
 # h. Rechercher les fichiers plus récents qu'une date dans le répertoire courant
 function find_files_newer_than() {
+	sortie="${GREEN}Entrez la date (format AAAA-MM-JJ HH:MM:SS) : ${NC}"
 	echo -e -n "${GREEN}Entrez la date (format AAAA-MM-JJ HH:MM:SS) : ${NC}"
 	read date
+	sortie="${sortie} \nRecherche des fichiers plus récents que ${date} dans le répertoire courant :"
 	find . -maxdepth 1 -type f -newermt "$date"
+	sortie="${sortie} \n$(find . -maxdepth 1 -type f -newermt "$date")"
+	write_logs $sortie
 }
 
 # i. Rechercher les fichiers plus récents qu'une date dans tous les sous-répertoires
 function find_files_newer_than_recursive() {
+	sortie="${GREEN}Entrez la date (format AAAA-MM-JJ HH:MM:SS) : ${NC}"
 	echo -e -n "${GREEN}Entrez la date (format AAAA-MM-JJ HH:MM:SS) : ${NC}"
 	read date
+	sortie="${sortie} \nRecherche des fichiers plus récents que ${date} dans tous les sous-répertoires :"
 	find . -type f -newermt "$date"
+	sortie="${sortie} \n$(find . -type f -newermt "$date")"
+	write_logs $sortie
 }
 
 # j. Rechercher les fichiers plus anciens qu'une date dans le répertoire courant
 function find_files_older_than() {
+	sortie="${GREEN}Entrez la date (format AAAA-MM-JJ HH:MM:SS) : ${NC}"
 	echo -e -n "${GREEN}Entrez la date (format AAAA-MM-JJ HH:MM:SS) : ${NC}"
 	read date
+	sortie="${sortie} \nRecherche des fichiers plus anciens que ${date} dans le répertoire courant :"
 	find . -maxdepth 1 -type f ! -newermt "$date"
+	sortie="${sortie} \n$(find . -maxdepth 1 -type f ! -newermt "$date")"
+	write_logs $sortie
 }
 
 # k. Rechercher les fichiers plus anciens qu'une date dans tous les sous-répertoires
 function find_files_older_than_recursive() {
+	sortie="${GREEN}Entrez la date (format AAAA-MM-JJ HH:MM:SS) : ${NC}"
 	echo -e -n "${GREEN}Entrez la date (format AAAA-MM-JJ HH:MM:SS) : ${NC}"
 	read date
+	sortie="${sortie} \nRecherche des fichiers plus anciens que ${date} dans tous les sous-répertoires :"
 	find . -type f ! -newermt "$date"
+	sortie="${sortie} \n$(find . -type f ! -newermt "$date")"
+	write_logs $sortie
 }
 
 # l. Rechercher les fichiers de poids supérieur à une valeur dans le répertoire courant
 function find_files_larger_than() {
+	sortie="${GREEN}Entrez l'unité (k : Ko | M : Mo | G : Go) : ${NC}"
 	echo -e -n "${GREEN}Entrez l'unité (k : Ko | M : Mo | G : Go) : ${NC}"
 	read unit
+	sortie="${sortie} \nEntrez la taille (unité ${unit}) :"
 	echo -e -n "${GREEN}Entrez la taille (unité ${unit}) : ${NC}"
 	read size
+	sortie="${sortie} \nRecherche des fichiers de poids supérieur à ${size}${unit} dans le répertoire courant :"
 	find . -maxdepth 1 -type f -size +${size}${unit}
+	sortie="${sortie} \n$(find . -maxdepth 1 -type f -size +${size}${unit})"
+	write_logs $sortie
 }
 
 # m. Rechercher les fichiers de poids supérieur à une valeur dans tous les sous-répertoires
 function find_files_larger_than_recursive() {
+	sortie="${GREEN}Entrez l'unité (k : Ko | M : Mo | G : Go) : ${NC}"
 	echo -e -n "${GREEN}Entrez l'unité (k : Ko | M : Mo | G : Go) : ${NC}"
 	read unit
+	sortie="${sortie} \nEntrez la taille (unité ${unit}) :"
 	echo -e -n "${GREEN}Entrez la taille (unité {unit}) : ${NC}"
 	read size
+	sortie="${sortie} \nRecherche des fichiers de poids supérieur à ${size}${unit} dans tous les sous-répertoires :"
 	find . -type f -size +${size}${unit}
+	sortie="${sortie} \n$(find . -type f -size +${size}${unit})"
+	write_logs $sortie
 }
 
 # n. Rechercher les fichiers de poids inférieur à une valeur dans le répertoire courant
 function find_files_smaller_than() {
+	sortie="${GREEN}Entrez l'unité (k : Ko | M : Mo | G : Go) : ${NC}"
 	echo -e -n "${GREEN}Entrez l'unité (k : Ko | M : Mo | G : Go) : ${NC}"
 	read unit
+	sortie="${sortie} \nEntrez la taille (unité ${unit}) :"
 	echo -e -n "${GREEN}Entrez la taille (unité {unit}) : ${NC}"
 	read size
+	sortie="${sortie} \nRecherche des fichiers de poids inférieur à ${size}${unit} dans le répertoire courant :"
 	find . -maxdepth 1 -type f -size -${size}${unit}
+	sortie="${sortie} \n$(find . -maxdepth 1 -type f -size -${size}${unit})"
+	write_logs $sortie
 }
 
 # o. Rechercher les fichiers de poids inférieur à une valeur dans tous les sous-répertoires
 function find_files_smaller_than_recursive() {
+	sortie="${GREEN}Entrez l'unité (k : Ko | M : Mo | G : Go) : ${NC}"
 	echo -e -n "${GREEN}Entrez l'unité (k : Ko | M : Mo | G : Go) : ${NC}"
 	read unit
+	sortie="${sortie} \nEntrez la taille (unité ${unit}) :"
 	echo -e -n "${GREEN}Entrez la taille (unité {unit}) : ${NC}"
 	read size
+	sortie="${sortie} \nRecherche des fichiers de poids inférieur à ${size}${unit} dans tous les sous-répertoires :"
 	find . -type f -size -${size}${unit}
+	sortie="${sortie} \n$(find . -type f -size -${size}${unit})"
+	write_logs $sortie
 }
 # p. Rechercher tous les fichiers d'une extension donnée dans le répertoire courant
 function find_files_with_extension() {
+	sortie="${GREEN}Entrez l'extension de fichier recherchée : ${NC}"
 	echo -e -n "${GREEN}Entrez l'extension de fichier recherchée : ${NC}"
 	read extension
+	sortie="${sortie} \nRecherche des fichiers d'extension ${extension} dans le répertoire courant :"
 	find . -maxdepth 1 -type f -name "*.$extension"
+	sortie="${sortie} \n$(find . -maxdepth 1 -type f -name "*.$extension")"
+	write_logs $sortie
 }
 
 # q. Rechercher tous les fichiers d'une extension donnée dans tous les sous-répertoires
 function find_files_with_extension_recursive() {
+	sortie="${GREEN}Entrez l'extension de fichier recherchée : ${NC}"
 	echo -e -n "${GREEN}Entrez l'extension de fichier recherchée : ${NC}"
 	read extension
+	sortie="${sortie} \nRecherche des fichiers d'extension ${extension} dans tous les sous-répertoires :"
 	find . -type f -name "*.$extension"
+	sortie="${sortie} \n$(find . -type f -name "*.$extension")"
+	write_logs $sortie
 }
 
 # r. Rechercher tous les fichiers dont le nom contient une chaine de caractère dans tous les sous-répertoires
 function find_files_with_string() {
+	sortie="${GREEN}Entrez la chaine de caractère recherchée : ${NC}"
 	echo -e -n "${GREEN}Entrez la chaine de caractère recherchée : ${NC}"
 	read string
+	sortie="${sortie} \nRecherche des fichiers dont le nom contient ${string} dans tous les sous-répertoires :"
 	find . -type f -name "*$string*"
+	sortie="${sortie} \n$(find . -type f -name "*$string*")"
+	write_logs $sortie
 }
 
 # Function selection

@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Définition des couleurs
 SERVICE_COLOR='\033[0;36m'
 STATUS_COLOR='\033[0;32m'
 NC='\033[0m'
@@ -41,10 +42,6 @@ function write_logs() {
 
 # 1. Identifier les services disponibles/installés sur le système
 function show_all_services() {
-	# sortie="Tous les services disponibles/installés sur le système : $(systemctl list-unit-files | grep enabled)"
-	# echo -e $sortie
-	# echo ""
-	# write_logs $sortie
 
 	# Boucle jusqu'à ce que l'utilisateur appuie sur la touche "Q"
 	while true; do
@@ -63,7 +60,7 @@ function show_all_services() {
 			# Obtient le statut du service
 			status=$(systemctl is-active $service)
 
-			# Affiche le nom du service et son statut dans un format esthétique avec des couleurs différentes pour chaque colonne
+			# Affichage sous forme de tableau
 			if [[ "$status" = "active" ]]; then
 				printf "${SERVICE_COLOR}%-40s${NC}  	| ${GREEN}%-s${NC}\n" "$service" "$status"
 			else
@@ -87,10 +84,6 @@ function show_all_services() {
 
 # 2. Identifier les services actifs sur le système
 function show_active_services() {
-	# sortie="Tous les services actifs sur le système : $(systemctl list-units --type=service --state=active)"
-	# echo -e $sortie
-	# echo ""
-	# write_logs $sortie
 
 	# Boucle jusqu'à ce que l'utilisateur appuie sur la touche "Q"
 	while true; do
@@ -110,7 +103,7 @@ function show_active_services() {
 			status=$(systemctl is-active $service)
 
 			if [[ "$status" == "active" ]]; then
-				# Affiche le nom du service et son statut dans un format esthétique avec des couleurs différentes pour chaque colonne
+			# Affichage sous forme de tableau
 				printf "${SERVICE_COLOR}%-40s${NC}  	| ${STATUS_COLOR}%-s${NC}\n" "$service" "$status"
 			fi
 		done
@@ -131,11 +124,6 @@ function show_active_services() {
 
 # 3. Identifier le statut d’un service dont le nom contient une chaine de caractères (définie en paramètre)
 function show_services_by_name() {
-	# read -p "Entrez le nom du service : " service_name
-	# sortie="Tous les services dont le nom contient une chaine de caractères (définie en paramètre) : $(systemctl status $service_name)"
-	# echo -e $sortie
-	# echo ""
-	# write_logs $sortie
 
 	# Lecture de la chaîne de caractères pour le filtre
 	echo -n -e "${GREEN}Rechercher des services contenant (laissez vide pour tout afficher) : ${NC}"
@@ -170,7 +158,7 @@ function show_services_by_name() {
 				status_color="${RED}$status${NC}"
 			fi
 
-			# Affiche le nom du service et son statut dans un format esthétique avec des couleurs différentes pour chaque colonne
+			# Affichage sous forme de tableau
 			printf "${SERVICE_COLOR}%-40s${NC}  	| $status_color\n" "$service"
 		done
 

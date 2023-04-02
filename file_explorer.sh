@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Définition des couleurs
 GREEN='\033[0;32m'
 NC='\033[0m' 
 
@@ -30,7 +31,6 @@ function show_file_explorer_options() {
 	echo "16. Rechercher tous les fichiers d'une extension donnée dans le répertoire courant"
 	echo "17. Rechercher tous les fichiers d'une extension donnée dans tous les sous-répertoires"
 	echo "18. Rechercher tous les fichiers dont le nom contient une chaine de caractère dans tous les sous-répertoires"
-	# + Chaque résultat de sortie doit être sauvegardé dans un fichier (résultats précédent doivent pas être supprimés + trié par date)
 	echo "19. Comparer deux fichiers et afficher les différences"
 	echo "R. Retour"
 	echo -e "Q. Quitter"
@@ -248,7 +248,6 @@ function find_files_with_string() {
 }
 
 # t. Permet de comparer deux fichiers
-
 function compare_files() {
 
 	read -p "Entrez le chemin du premier fichier : " file1

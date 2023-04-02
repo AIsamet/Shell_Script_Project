@@ -31,7 +31,7 @@ function show_file_explorer_options() {
 	echo "17. Rechercher tous les fichiers d'une extension donnée dans tous les sous-répertoires"
 	echo "18. Rechercher tous les fichiers dont le nom contient une chaine de caractère dans tous les sous-répertoires"
 	# + Chaque résultat de sortie doit être sauvegardé dans un fichier (résultats précédent doivent pas être supprimés + trié par date)
-	echo -e "19. *A définir*\n"
+	echo "19. Comparer deux fichiers et afficher les différences"
 	echo "R. Retour"
 	echo -e "Q. Quitter"
 }
@@ -246,6 +246,38 @@ function find_files_with_string() {
 	write_logs $sortie
 }
 
+# t. Permet de comparer deux fichiers
+
+function compare_files() {
+
+	read -p "Entrez le chemin du premier fichier : " file1
+
+	if [ ! -f "$file1" ]; then
+		echo "Erreur : le fichier $file1 n'existe pas."
+		return
+	fi
+
+	read -p "Entrez le chemin du deuxième fichier : " file2
+
+	if [ ! -f "$file2" ]; then
+		echo "Erreur : le fichier $file2 n'existe pas."
+		return
+	fi
+
+	diff_output=$(diff "$file1" "$file2")
+
+	if [ $? -eq 0 ]; then
+		sortie="Les fichiers $file1 et $file2 sont identiques."
+		echo -e $sortie
+		write_logs $sortie
+	else
+		sortie="Les fichiers $file1 et $file2 sont différents :"
+		echo -e $sortie
+		echo "$diff_output"
+		write_logs "$sortie \n$diff_output"
+	fi
+}
+
 # Function selection
 function selection() {
 	while true; do 
@@ -270,7 +302,7 @@ function selection() {
 			16) find_files_with_extension ;;
 			17) find_files_with_extension_recursive ;;
 			18) find_files_with_string ;;
-			19) echo "A définir" ;;
+			19) compare_files ;;
 			r|R) bash menu.sh 
 			break ;;
 			q|Q) exit 0;;

@@ -39,6 +39,7 @@ function show_file_explorer_options() {
 function write_logs() {
     LOGS_DIR="/home/$(whoami)/script_logs"
     LOGS_FILE="$LOGS_DIR/logs.txt"
+	echo -e "Logs : $LOGS_FILE"
 
 	if [ ! -d "$LOGS_DIR" ]; then
         mkdir -p "$LOGS_DIR"

@@ -40,7 +40,7 @@ function write_logs() {
     LOGS_DIR="/home/$(whoami)/script_logs"
     LOGS_FILE="$LOGS_DIR/logs.txt"
 
-	 if [ ! -d "$LOGS_DIR" ]; then
+	if [ ! -d "$LOGS_DIR" ]; then
         mkdir -p "$LOGS_DIR"
     fi
 

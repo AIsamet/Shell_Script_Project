@@ -18,6 +18,7 @@ Puis exécutez depuis n'importe où la commande suivante :
     menu.sh
 
 **Ou**
+
 Depuis le répertoire contenant les scripts, exécutez la commande suivante :
 
     ./menu.sh
@@ -31,3 +32,7 @@ Depuis le répertoire contenant les scripts, exécutez la commande suivante :
 En cas d'erreur d'exécution, tapez la commande suivante :
 
     sed -i 's/\r//' menu.sh file_explorer.sh process_explorer.sh services_explorer.sh
+
+En cas d'erreur du type "Permission non accordée", tapez la commande suivante dans le répertoire contenant les scripts : 
+    
+    sudo chmod o+x *.sh
